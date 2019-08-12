@@ -48,7 +48,11 @@ rvm_install_commands_setup()
       (OpenBSD)
         log "Trying to install GNU version of tar, might require sudo password"
         if (( UID ))
-        then sudo pkg_add -z gtar-1
+        then
+          if \which doas
+          then doas pkg_add -z gtar-1
+          else sudo pkg_add -z gtar-1
+          fi
         else pkg_add -z gtar-1
         fi
         rvm_tar_command=gtar

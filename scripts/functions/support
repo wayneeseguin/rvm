@@ -347,6 +347,33 @@ __rvm_setup_sudo_function_Solaris()
   fi
 }
 
+__rvm_setup_sudo_function_OpenBSD()
+{
+  if
+    __rvm_which sudo >/dev/null 2>&1
+  then
+    __rvm_sudo()
+    {
+      \command \sudo "$@"
+    }
+  elif 
+    __rvm_which doas >/dev/null 2>&1
+  then
+    __rvm_sudo()
+    {
+      # No prompting in doas.
+      if
+        [[ "$1" == "-p" ]]
+      then
+        shift 2
+      fi
+      \command \doas "$@"
+    }
+  else
+    rvm_debug "Warning: No 'sudo' found."
+  fi
+}
+
 __rvm_setup_sudo_function_Other()
 {
   if
@@ -355,6 +382,17 @@ __rvm_setup_sudo_function_Other()
     __rvm_sudo()
     {
       \command \sudo "$@"
+    }
+  then
+    __rvm_sudo()
+    {
+      # No prompting in doas.
+      if
+        [[ "$1" == "-p" ]]
+      then
+        shift 2
+      fi
+      \command \doas "$@"
     }
   else
     rvm_debug "Warning: No 'sudo' found."
