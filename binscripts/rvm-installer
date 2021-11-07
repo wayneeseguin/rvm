@@ -205,7 +205,7 @@ __rvm_curl()
   }
 
   typeset -a __flags
-  __flags=( --fail --location --max-redirs 10 )
+  __flags=( -q --fail --location --max-redirs 10 )
 
   [[ "$*" == *"--max-time"* ]] ||
   [[ "$*" == *"--connect-timeout"* ]] ||
