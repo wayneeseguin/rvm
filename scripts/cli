@@ -658,6 +658,7 @@ __rvm_parse_args()
             rvm_token=${rvm_token#--}
             rvm_token=${rvm_token//-/_}
             export "rvm_${rvm_token}_flag"=1
+            rvm_ruby_args+=($next_token);
             ;;
 
           --no-docs)

@@ -273,7 +273,26 @@ __rvm_env_print()
   if
     [[ "$rvm_path_flag" == "1" || "$*" == *"--path"* ]]
   then
-    echo "$environment_file_path"
+    if
+      [[ -n "$@" ]]
+    then
+      rvm_env_exists="0"
+      for env in "$rvm_environments_path"/*
+      do
+        if
+          [[ "$@" == *"@"* ]]
+        then
+          sub1=$(echo $@ | \cut -d "@" -f1)
+          sub2=$(echo $@ | \cut -d "@" -f2)
+          [[ $env == *"$sub1"*"@$sub2"* ]] && rvm_log "$env" && rvm_env_exists="1"
+        else
+          [[ "$env" == *"$@"* ]] && rvm_log "${env}" && rvm_env_exists="1"
+        fi
+      done
+      [[ "$rvm_env_exists" == "0" ]] && rvm_log "${rvm_error_clr:-} rvm: Environment $@ not found." >&2
+    else
+      rvm_log "$environment_file_path"
+    fi
   elif
     [[ "$rvm_cron_flag" == "1" || "$*" == *"--cron"* ]]
   then
