@@ -315,7 +315,7 @@ requirements_osx_brew_define_openssl()
 
   case "$1" in
     (ruby-2.3*|ruby-2.2*|ruby-2.1*|ruby-2.0*|ruby-1.9*|ruby-1.8*)
-      brew_openssl_package="openssl"
+      brew_openssl_package="https://raw.githubusercontent.com/Homebrew/homebrew-core/8c9b113bc6812dc74c598c8f860017e42fba8d78/Formula/openssl.rb"
       ;;
 
     (ruby-2*|ruby-3.0*)
