@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
-requirements_rosadesktop_lib_installed()
+requirements_openmandriva_old_lib_installed()
 {
   rpm -q --whatprovides "$1" >/dev/null || return $?
 }
 
-requirements_rosadesktop_lib_available()
+requirements_openmandriva_old_lib_available()
 {
   urpmq "$1" >/dev/null 2>&1 || return $?
 }
 
-requirements_rosadesktop_version_list()
+requirements_openmandriva_old_version_list()
 {
   rpm -q --whatprovides "$1" | sed -e "s#^$1-##"
 }
 
-requirements_rosadesktop_libs_install()
+requirements_openmandriva_old_libs_install()
 {
   __rvm_try_sudo urpmi --downloader wget --wget-options --auth-no-challenge --auto "$@" || return $?
 }
 
-requirements_rosadesktop_update_system()
+requirements_openmandriva_old_update_system()
 {
   __rvm_try_sudo urpmi.update -a ||
   {
@@ -37,7 +37,7 @@ requirements_rosadesktop_update_system()
   }
 }
 
-requirements_rosadesktop_define()
+requirements_openmandriva_old_define()
 {
   case "$1" in
     (rvm)
@@ -60,7 +60,7 @@ requirements_rosadesktop_define()
 
     (*-head)
       requirements_check git
-      requirements_rosadesktop_define "${1%-head}"
+      requirements_openmandriva_old_define "${1%-head}"
       ;;
 
     (*)
@@ -78,4 +78,9 @@ requirements_rosadesktop_define()
         readline-devel zlib zlib-devel openssl-devel make bzip2 automake libtool bison
       ;;
   esac
+}
+
+requirements_openmandriva_old_before()
+{
+  __lib_type=openmandriva_old
 }

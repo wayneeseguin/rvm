@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+requirements_openmandriva_lib_installed()
+{
+  dnf list installed "$1" >/dev/null 2>&1 || return $?
+}
+
+requirements_openmandriva_lib_available()
+{
+  dnf info "$1" >/dev/null 2>&1 || return $?
+}
+
+requirements_openmandriva_libs_install()
+{
+  __rvm_try_sudo dnf install -y "$@" || return $?
+}
+
+requirements_openmandriva_libs_remove()
+{
+  __rvm_try_sudo dnf remove -y "$@" || return $?
+}
+
+requirements_openmandriva_check_binary()
+{
+  {
+    __rvm_which update-alternatives >/dev/null &&
+    update-alternatives --display "$1" >/dev/null 2>&1
+  } ||
+  __rvm_which "$1" >/dev/null || return $?
+}
+
+requirements_openmandriva_define()
+{
+  case "$1" in
+    (rvm)
+      requirements_check bash curl patch
+      ;;
+
+    (jruby*)
+      requirements_check make
+
+      if
+        is_head_or_disable_binary "$1"
+      then
+        requirements_check git
+
+        requirements_openmandriva_check_binary javac ||
+          requirements_check_fallback java-1.8.0-openjdk-devel java-devel ||
+          requirements_check_fallback java-1.7.0-openjdk-devel java-devel
+
+        case $( jruby_installation_method  "$1" ) in
+          mvn) requirements_check_custom_after mvn=maven ;;
+        esac
+
+      else
+        requirements_openmandriva_check_binary java ||
+          requirements_check_fallback java-1.8.0-openjdk java ||
+          requirements_check_fallback java-1.7.0-openjdk java
+      fi
+      ;;
+
+    (rbx*|rubinius*)
+      requirements_check automake bison clang flex gdbm-devel git yaml-devel llvm-devel llvm-static \
+                         make ncurses-devel openssl-devel readline-devel ruby-devel rubygems zlib-devel
+      ;;
+
+    (ir*)
+      true # not that easy
+      ;;
+
+    (opal)
+      true # not that easy
+      ;;
+
+    (*-head)
+      requirements_check git
+      requirements_openmandriva_define "${1%-head}"
+      ;;
+
+    (*)
+      requirements_check autoconf automake bison bzip2 gcc-c++ glibc-devel ffi-devel libtool \
+                         yaml-devel make patch readline openssl-devel readline-devel sqlite-devel zlib zlib-devel
+      ;;
+  esac
+}

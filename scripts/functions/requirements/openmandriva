@@ -1,86 +1,21 @@
 #!/usr/bin/env bash
 
-requirements_openmandriva_lib_installed()
+source "$rvm_scripts_path/functions/requirements/openmandriva_dnf"
+source "$rvm_scripts_path/functions/requirements/openmandriva_old"
+
+requirements_openmandriva_before()
 {
-  rpm -q --whatprovides "$1" >/dev/null || return $?
-}
+  \typeset __type
+  for __type in openmandriva_old openmandriva_dnf
+  do
+    if
+      requirements_find_${__type}
+    then
+      __lib_type=${__type}
+      return 0
+    fi
+  done
 
-requirements_openmandriva_lib_available()
-{
-  urpmq "$1" >/dev/null 2>&1 || return $?
-}
-
-requirements_openmandriva_version_list()
-{
-  rpm -q --whatprovides "$1" | sed -e "s#^$1-##"
-}
-
-requirements_openmandriva_libs_install()
-{
-  __rvm_try_sudo urpmi --downloader wget --wget-options --auth-no-challenge --auto "$@" || return $?
-}
-
-requirements_openmandriva_update_system()
-{
-  __rvm_try_sudo urpmi.update -a ||
-  {
-    \typeset __ret=$?
-    case ${__ret} in
-      (100)
-        rvm_error "There has been error while updating 'urpmi.update', please give it some time and try again later.
-404 errors should be fixed for rvm to proceed. Check your sources configured in:
-    /etc/urpmi/urpmi.cfg
-"
-        ;;
-    esac
-    return ${__ret}
-  }
-}
-
-requirements_openmandriva_define()
-{
-  case "$1" in
-    (rvm)
-      requirements_check bash curl patch
-      ;;
-
-    (jruby*)
-      requirements_check make
-      
-      true # not that easy
-      ;;
-
-    (ir*)
-      true # not that easy
-      ;;
-
-    (opal)
-      true # not that easy
-      ;;
-
-    (*-head)
-      requirements_check git
-      requirements_openmandriva_define "${1%-head}"
-      ;;
-
-    (*)
-      if [[ ${#rvm_patch_names[@]} -gt 0 || "$1" == *"-head" ]]
-      then requirements_version_minimal autoconf 2.67
-      else requirements_check autoconf
-      fi
-
-      if [[ "${_system_arch}" == "x86_64" || "${_system_arch}" == "aarch64" ]]
-      then requirements_check lib64yaml-devel lib64ffi-devel
-      else requirements_check libyaml-devel libffi-devel
-      fi
-
-      requirements_check autoconf gcc-c++ glibc-devel patch readline sqlite3-devel \
-        readline-devel zlib zlib-devel openssl-devel make bzip2 automake libtool bison
-      ;;
-  esac
-}
-
-requirements_rosadesktop_before()
-{
-  __lib_type=openmandriva
+  # fallback
+  __lib_type=openmandriva_old
 }
