@@ -189,6 +189,12 @@ __rvm_use_()
     export GEM_HOME GEM_PATH MY_RUBY_HOME RUBY_VERSION IRBRC
     GEM_HOME="$rvm_ruby_gem_home"
     GEM_PATH="$rvm_ruby_gem_path"
+
+    if (( rvm_append_system_gemsets ))
+    then
+      GEM_PATH="$GEM_PATH:$rvm_ruby_gem_system_path"
+    fi
+
     MY_RUBY_HOME="$rvm_ruby_home"
     RUBY_VERSION="$rvm_ruby_string"
     IRBRC="$rvm_ruby_irbrc"
@@ -212,6 +218,16 @@ __rvm_use_()
     then __path_prefix="$GEM_HOME/bin:$rvm_ruby_global_gems_path/bin:${rvm_ruby_binary%/*}:${rvm_bin_path}"
     else __path_prefix="$GEM_HOME/bin:${rvm_ruby_binary%/*}:${rvm_bin_path}"
     fi
+
+    if (( rvm_append_system_gemsets ))
+    then
+      __path_prefix="$__path_prefix:$rvm_ruby_gem_system_home/bin"
+      if [[ -n "$rvm_ruby_global_gems_system_path" ]] && [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_global_gems_system_path" ]]
+      then
+        __path_prefix="$__path_prefix:$rvm_ruby_global_gems_system_path/bin"
+      fi
+    fi
+
     __path_suffix=""
 }
 

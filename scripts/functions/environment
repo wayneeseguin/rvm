@@ -85,7 +85,14 @@ __rvm_ensure_has_environment_files()
   then __path+="${__gem_home}/bin:"
   fi
   __path+="${rvm_ruby_global_gems_path}/bin:${rvm_ruby_home}/bin"
-
+  if (( rvm_append_system_gemsets ))
+  then
+    __path+=":$rvm_ruby_gem_system_home/bin"
+    if [[ -n "$rvm_ruby_global_gems_system_path" ]] && [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_global_gems_system_path" ]]
+    then
+      __path+=":$rvm_ruby_global_gems_system_path/bin"
+    fi
+  fi
 
   \command \rm -f "$file_name"
   \command \mkdir -p "${__gem_home}/wrappers" "${rvm_environments_path}" "${rvm_wrappers_path}"

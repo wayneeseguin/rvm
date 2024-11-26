@@ -40,7 +40,7 @@ tools_user_usage()
     rvm_error "$msg"
   done
 
-  rvm_error "Usage: rvm user [[gemsets] [rubies] [hooks] [pkgs] [wrappers] [all] [--skel]|none]"
+  rvm_error "Usage: rvm user [[gemsets] [rubies] [hooks] [pkgs] [wrappers] [all] [--skel] [--append-system-gemsets]|none]"
 }
 
 tools_user_setup_path()
@@ -101,6 +101,7 @@ tools_user()
       all)     selection+=( gemsets rubies hooks pkgs wrappers userdb log ) ;;
       gemsets) selection+=( gemsets userdb log ) ;;
       --skel)  rvm_skel_flag=1 ;;
+      --append-system-gemsets)  rvm_append_system_gemsets=1 ;;
       rubies|hooks|pkgs|userdb|log|wrappers)  selection+=( "$item" ) ;;
       (none)
         tools_user_none "${HOME}/.rvmrc"
@@ -155,6 +156,7 @@ tools_user()
           tools_user_setup_path "${target}" $dir
         done
         tools_user_setup "${target}" rvm_create_flag 1
+        tools_user_setup "${target}" rvm_append_system_gemsets "${rvm_append_system_gemsets:-0}"
         ;;
       wrappers|hooks|pkgs|log)
         tools_user_setup_path "${target}" "$item"

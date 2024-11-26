@@ -51,6 +51,7 @@ __rvm_gemset_select_cli_validation()
 
 __rvm_gemset_select_only()
 {
+  rvm_ruby_gem_system_home="$rvm_path/gems/$rvm_ruby_string"
   rvm_ruby_gem_home="${rvm_gems_path:-"$rvm_path/gems"}/$rvm_ruby_string"
 
   : rvm_ignore_gemsets_flag:${rvm_ignore_gemsets_flag:=0}:
@@ -58,9 +59,21 @@ __rvm_gemset_select_only()
   then
     rvm_ruby_global_gems_path="${rvm_ruby_gem_home}"
     rvm_ruby_gem_path="${rvm_ruby_gem_home}"
+
+    if [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_gem_home" ]]
+    then
+      rvm_ruby_global_gems_system_path="${rvm_ruby_gem_system_home}"
+      rvm_ruby_gem_system_path="${rvm_ruby_gem_system_home}"
+    fi
+
     rvm_gemset_name=""
   else
     rvm_ruby_global_gems_path="${rvm_ruby_gem_home}${rvm_gemset_separator:-"@"}global"
+
+    if [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_gem_home" ]]
+    then
+      rvm_ruby_global_gems_system_path="${rvm_ruby_gem_system_home}${rvm_gemset_separator:-"@"}global"
+    fi
 
     __rvm_gemset_handle_default
     [[ -z "$rvm_gemset_name" ]] ||
@@ -69,8 +82,18 @@ __rvm_gemset_select_only()
     if [[ "$rvm_gemset_name" == "global" ]]
     then
       rvm_ruby_gem_path="${rvm_ruby_gem_home}"
+
+      if [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_gem_home" ]]
+      then
+        rvm_ruby_gem_system_path="${rvm_ruby_gem_system_home}"
+      fi
     else
       rvm_ruby_gem_path="${rvm_ruby_gem_home}:${rvm_ruby_global_gems_path}"
+
+      if [[ "$rvm_ruby_gem_system_home" != "$rvm_ruby_gem_home" ]]
+      then
+        rvm_ruby_gem_system_path="${rvm_ruby_gem_system_home}:${rvm_ruby_global_gems_system_path}"
+      fi
     fi
   fi
 
