@@ -81,7 +81,7 @@ __rvm_ensure_has_environment_files()
   __gem_home="${rvm_ruby_gem_home}"
   file_name="${__gem_home}/environment"
   __path=""
-  if [[ "${__gem_home##*@}" != "global" ]]
+  if [[ "${__gem_home##*${rvm_gemset_separator:-'@'}}" != "global" ]]
   then __path+="${__gem_home}/bin:"
   fi
   __path+="${rvm_ruby_global_gems_path}/bin:${rvm_ruby_home}/bin"

@@ -36,9 +36,9 @@ __rvm_gemset_select_cli_validation()
     rvm_gemset_name="${rvm_gemset_name#*${rvm_gemset_separator:-"@"}}"
   fi
 
-  if [[ -z "${rvm_ruby_string:-}" && -n "${GEM_HOME:-}" && -n "${GEM_HOME%@*}" ]]
+  if [[ -z "${rvm_ruby_string:-}" && -n "${GEM_HOME:-}" && -n "${GEM_HOME%${rvm_gemset_separator:-@}*}" ]]
   then
-    rvm_ruby_string="${GEM_HOME%@*}"
+    rvm_ruby_string="${GEM_HOME%${rvm_gemset_separator:-@}*}"
     rvm_ruby_string="${rvm_ruby_string##*/}"
   fi
 
@@ -76,7 +76,7 @@ __rvm_gemset_select_only()
 
   if [[ -n "${rvm_gemset_name}" ]]
   then
-    rvm_env_string="${rvm_ruby_string}@${rvm_gemset_name}"
+    rvm_env_string="${rvm_ruby_string}${rvm_gemset_separator:-@}${rvm_gemset_name}"
   else
     rvm_env_string=${rvm_ruby_string}
   fi
@@ -146,7 +146,7 @@ __rvm_gemset_use_ensure()
 {
   if
     [[ ! -d "$rvm_ruby_gem_home" ]] ||
-    [[ -n "${rvm_expected_gemset_name}" && ! -d "${rvm_ruby_gem_home%@*}@${rvm_expected_gemset_name}" ]]
+    [[ -n "${rvm_expected_gemset_name}" && ! -d "${rvm_ruby_gem_home%${rvm_gemset_separator}*}${rvm_gemset_separator}${rvm_expected_gemset_name}" ]]
   then
     if
       (( ${rvm_gemset_create_on_use_flag:=0} == 1 || ${rvm_create_flag:=0} == 1 ))

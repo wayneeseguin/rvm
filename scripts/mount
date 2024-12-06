@@ -226,7 +226,7 @@ external_mount()
   echo "Mounting '${rvm_ruby_string}' from '${prefix_path}' with 'bin/${ruby_path##*/}'"
 
   external_mount_link_default_binaries
-  mkdir -p "$rvm_gems_path/$rvm_ruby_string" "$rvm_gems_path/$rvm_ruby_string@global"
+  mkdir -p "$rvm_gems_path/$rvm_ruby_string" "$rvm_gems_path/$rvm_ruby_string${rvm_gemset_separator:-@}global"
 
   __rvm_select "$rvm_ruby_string"
   __rvm_fix_rbconfig "$rvm_rubies_path/$rvm_ruby_string"

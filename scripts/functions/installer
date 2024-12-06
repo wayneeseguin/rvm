@@ -1367,7 +1367,7 @@ update_gemsets_install_rvm()
 
   # rvm /gems
   paths=($(
-    __rvm_find "$rvm_path/gems" -maxdepth 1 "${name_opt}" '*@global'
+    __rvm_find "$rvm_path/gems" -maxdepth 1 "${name_opt}" "*${rvm_gemset_separator:-@}global"
   ))
 
   for _gem in rvm gem-wrappers
@@ -1379,7 +1379,7 @@ update_gemsets_install_rvm()
       for _iterator in "${paths[@]}"
       do
         # skip unless this ruby is installed
-        installed="${_iterator%@global}"
+        installed="${_iterator%${rvm_gemset_separator:-@}global}"
         installed="${installed/\/gems\//\/rubies\//}/bin"
         installed="${installed//\\/}"
         [[ -x "${installed}/ruby" ]] || continue
@@ -1411,7 +1411,7 @@ update_gemsets_install_rvm()
         for _iterator in "${missing[@]}"
         do
           installed="${_iterator#*=}"
-          installed="${installed%@global}"
+          installed="${installed%${rvm_gemset_separator:-@}global}"
           for __gem_home in "${installed}"{,@*}
           do
             if [[ "${__gem_home}" == *"@*" ]]

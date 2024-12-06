@@ -267,7 +267,7 @@ rubygems_setup()
 
   \typeset -a __command
   __command=(
-    GEM_HOME="$rvm_gems_path/${rvm_ruby_string}@global" GEM_PATH="" "${rvm_ruby_binary}" -d "${rvm_src_path}/$rvm_gem_package_name/setup.rb"
+    GEM_HOME="$rvm_gems_path/${rvm_ruby_string}${rvm_gemset_separator:-@}global" GEM_PATH="" "${rvm_ruby_binary}" -d "${rvm_src_path}/$rvm_gem_package_name/setup.rb"
   )
   if [[ ${rvm_debug_flag:-0} == 1 || ${rvm_trace_flag:-0} == 1 ]]
   then __command+=( --verbose )

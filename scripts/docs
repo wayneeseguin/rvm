@@ -106,7 +106,7 @@ update_rdoc()
 
 install_rdoc_data()
 {
-  __rvm_use ${rvm_docs_ruby_string%%@*}@global
+  __rvm_use ${rvm_docs_ruby_string%%${rvm_gemset_separator:-@}*}${rvm_gemset_separator:-@}global
   update_rdoc
   gem list rdoc-data | __rvm_grep "^rdoc" || gem install rdoc-data
   rdoc-data --install

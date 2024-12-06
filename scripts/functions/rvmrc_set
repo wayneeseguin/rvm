@@ -11,8 +11,8 @@ __rvm_set_versions_conf()
   fi
 
   identifier=$(__rvm_env_string)
-  gemset=${identifier#*@}
-  identifier=${identifier%@*}
+  gemset=${identifier#*${rvm_gemset_separator}}
+  identifier=${identifier%${rvm_gemset_separator}*}
 
   printf "%b" "ruby=$identifier
 " >> .versions.conf
@@ -46,7 +46,7 @@ __rvm_set_ruby_version()
         \command \mv .ruby-gemset .ruby-gemset.$(__rvm_date +%m.%d.%Y-%H:%M:%S)
         rvm_warn ".ruby-gemset is not empty, moving aside to preserve."
       fi
-      echo "${__version##*@}" > .ruby-gemset
+      echo "${__version##*${rvm_gemset_separator}}" > .ruby-gemset
       ;;
     (*)
       if

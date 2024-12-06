@@ -289,7 +289,7 @@ __rvm_ruby_string_installed()
     -d "${__ruby_inst_dir}"
   ]] &&
   [[ -z "${rvm_gemset_name}" || ${rvm_create_flag:-0} -eq 1 ||
-    -d "${__ruby_inst_dir}${rvm_gemset_separator}${rvm_gemset_name}"
+    -d "${__ruby_inst_dir}${rvm_gemset_separator:-@}${rvm_gemset_name}"
   ]]
 }
 
@@ -319,10 +319,10 @@ __rvm_ruby_string()
     ${rvm_expanding_aliases:=0} ${rvm_head_flag:=0}
 
   if
-    [[ "$rvm_ruby_string" == *"${rvm_gemset_separator}"* ]]
+    [[ "$rvm_ruby_string" == *"${rvm_gemset_separator:-@}"* ]]
   then
-    rvm_gemset_name="${rvm_ruby_string/*${rvm_gemset_separator}/}"
-    rvm_ruby_string="${rvm_ruby_string/${rvm_gemset_separator}*/}"
+    rvm_gemset_name="${rvm_ruby_string/*${rvm_gemset_separator:-@}/}"
+    rvm_ruby_string="${rvm_ruby_string/${rvm_gemset_separator:-@}*/}"
   fi
   # known ruby aliases
   if
@@ -355,10 +355,10 @@ __rvm_ruby_string()
       rvm_ruby_string="system"
     fi
     if
-      [[ "$rvm_ruby_string" == *"${rvm_gemset_separator}"* ]]
+      [[ "$rvm_ruby_string" == *"${rvm_gemset_separator:-@}"* ]]
     then
-      rvm_gemset_name="${rvm_ruby_string/*${rvm_gemset_separator}/}"
-      rvm_ruby_string="${rvm_ruby_string/${rvm_gemset_separator}*/}"
+      rvm_gemset_name="${rvm_ruby_string/*${rvm_gemset_separator:-@}/}"
+      rvm_ruby_string="${rvm_ruby_string/${rvm_gemset_separator:-@}*/}"
     fi
   fi
   if
@@ -508,7 +508,7 @@ __rvm_ruby_strings_exist()
     rvm_gemset_name=""
     rvm_verbose_flag=0 __rvm_use "${rvm_ruby_string}" >/dev/null 2>&1 || return $?
     true rvm_gemset_name:${rvm_gemset_name:=${rvm_expected_gemset_name}}
-    printf "%b" "${rvm_ruby_string}${rvm_gemset_name:+@}${rvm_gemset_name:-}\n"
+    printf "%b" "${rvm_ruby_string}${rvm_gemset_name:+${rvm_gemset_separator:-@}}${rvm_gemset_name:-}\n"
   done
   unset rvm_ruby_string
 }

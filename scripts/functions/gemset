@@ -94,7 +94,7 @@ gemset_create()
     if
       (( ${rvm_skip_gemsets_flag:-0} == 0 ))
     then
-      __rvm_with "${rvm_ruby_string}${gemset:+@}${gemset}" gemset_initial ${gemset:-default}
+      __rvm_with "${rvm_ruby_string}${gemset:+${rvm_gemset_separator:-@}}${gemset}" gemset_initial ${gemset:-default}
     fi
   done
 
@@ -441,7 +441,7 @@ __rvm_initial_gemsets_create_without_rubygems()
 __rvm_initial_gemsets_create_gemsets()
 {
   gemset_create "global" &&
-  __rvm_with "${rvm_ruby_string}@global" __rvm_remove_without_gems &&
+  __rvm_with "${rvm_ruby_string}${rvm_gemset_separator:-@}global" __rvm_remove_without_gems &&
   gemset_create ""
 }
 
