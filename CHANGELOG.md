@@ -177,6 +177,7 @@
 * Migrate from rvm_io.global.ssl.fastly.net to rvm-io.global.ssl.fastly.net to fix domain fronting report from Fastly [\#5438](https://github.com/rvm/rvm/pull/5438)
 * Upgrade github actions and truffleruby version in CI [\#5456](https://github.com/rvm/rvm/pull/5456)
 * Parallelize GitHub Action jobs in CI [\#5458](https://github.com/rvm/rvm/pull/5458)
+* Speed up CI process [\#5467](https://github.com/rvm/rvm/pull/5467)
 
 ## [1.29.12](https://github.com/rvm/rvm/releases/tag/1.29.12)
 15 January 2021 - [Full Changelog](https://github.com/rvm/rvm/compare/1.29.11...1.29.12)

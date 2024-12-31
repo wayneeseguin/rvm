@@ -23,6 +23,7 @@ jobs:
           # These tests also change the default ruby, which is another reason to run them last.
           - "tests/fast/*"
           - "tests/long/truffleruby_comment_test.sh"
+          - "tests/fast_on_linux/*"
         include:
           - os: ubuntu-latest
             ruby: 3.3.3
@@ -32,6 +33,8 @@ jobs:
             ruby: 3.3.3
             # https://github.com/rvm/rvm/issues/4937
             test: "tests/long/ruby_prepare_mount_comment_test.sh"
+          # - os: ubuntu-latest
+          #   test: "tests/fast_on_linux/*"
     runs-on: ${{ matrix.os }}
     env:
       TERM: ansi
