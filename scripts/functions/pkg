@@ -25,7 +25,7 @@ requirements_rvm_pkg_libs_install()
   done
 }
 
-requirements_rvm_pkg_after_uniqe_paths()
+requirements_rvm_pkg_after_unique_paths()
 {
   \typeset __lib __lib_full_name
   for __lib
@@ -53,7 +53,7 @@ requirements_rvm_pkg_configure()
   __target="$1"
   shift
   __rvm_read_lines __packages <(
-    requirements_rvm_pkg_after_uniqe_paths "$@"
+    requirements_rvm_pkg_after_unique_paths "$@"
   )
   for __package in "${__packages[@]}"
   do __rvm_update_configure_opt_dir "$__target" "$__package"
